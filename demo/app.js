@@ -7,7 +7,7 @@ const OWNERS = { "AUR-1": "Ayu", "AUR-2": "Ben", "AUR-3": "Citra", "AUR-4": "Dew
 
 const SCENARIOS = {
   "at-risk": {
-    label: "Aurora 2.4 — at risk (61)",
+    label: "Aurora 2.4 — at risk (58)",
     version: { name: "2.4", projectKey: "AUR", releaseDate: "2026-12-20" },
     issues: [
       { key: "AUR-1", summary: "Single sign-on via Atlassian account", status: "Done", type: "Story", priority: "High", assignee: { displayName: "Ayu" }, labels: [] },

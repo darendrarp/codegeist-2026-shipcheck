@@ -56,9 +56,9 @@ voice — they cannot be done from this VM.
 - **No live Atlassian testing yet.** All 38 tests use fake Forge clients or
   pure logic. The Jira/Confluence/TWG calls follow documented REST/GraphQL
   shapes, but live-site verification (§2) is still open.
-- **No screenshots from a live Jira install yet** — the demo site is the
-  visual proof until the Forge install exists. Take 2–3 screenshots during
-  §2 for the Devpost gallery.
+- **Screenshots:** demo screenshots exist (`docs/screenshots/`, taken from the
+  live Vercel demo 19 Nov 2026). Screenshots from a live Jira install do not
+  exist yet — take 2–3 during §2 for the Devpost gallery.
 - **Marketplace bonus NOT pursued.** A Marketplace-submitted app cannot be
   shared via installation link (Atlassian requires a separate copy app),
   and listing takes review time. The submission targets the other three

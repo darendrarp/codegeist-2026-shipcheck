@@ -21,9 +21,9 @@ Never fake a live Jira screen.
 
 ## 0:30–1:30 — The score (demo site or Jira dashboard)
 
-> "Aurora 2.4 scores 61 out of 100 — CAUTION. The breakdown shows why:
-> completion is fine, but there's an open blocker, a PR failing checks, and
-> no release notes yet. Every point lost maps to something named."
+> "Aurora 2.4 scores 58 out of 100 — HOLD. The breakdown shows why:
+> only half the work is done, there's an open blocker, a PR failing checks,
+> and no release notes yet. Every point lost maps to something named."
 
 [Show: gauge + breakdown bars. Click the blocker row.]
 

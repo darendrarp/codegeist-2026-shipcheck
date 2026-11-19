@@ -20,6 +20,12 @@ artefact. Rovo only narrates the result.
 | **Bonus prizes** | Best Agents (Rovo) · Best app with Atlassian MCP · Best Teamwork Graph integration |
 | **Submission deadline** | 22 Dec 2026 15:00 EST / **23 Dec 2026 03:00 WIB** |
 
+![ShipCheck demo — Aurora 2.4 at risk, 58/100 HOLD](docs/screenshots/demo-at-risk.png)
+
+*Live demo, Aurora 2.4 scenario: 58/100 HOLD — one open blocker, one PR
+failing checks, no release notes yet. Click any issue status or approve a PR
+and the score moves live.*
+
 ## The problem
 
 Release day is a scavenger hunt: the release manager opens Jira to count open
