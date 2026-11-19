@@ -1,0 +1,198 @@
+modules:
+  # ---- Jira UI: project dashboard + issue panel (UI Kit, @forge/react) ----
+  jira:projectPage:
+    - key: shipcheck-dashboard
+      resource: main
+      render: native
+      resolver:
+        function: resolver
+      title: ShipCheck — Release Readiness
+  jira:issuePanel:
+    - key: shipcheck-issue-panel
+      resource: main
+      render: native
+      resolver:
+        function: resolver
+      title: ShipCheck
+
+  # ---- Rovo agent (Best Agents bonus) ----
+  rovo:agent:
+    - key: shipcheck-agent
+      name: ShipCheck
+      description: >
+        Release readiness agent. Answers "is this release ready to ship?" with a
+        deterministic score, names the blockers, finds their owners in the
+        Teamwork Graph, and drafts release notes.
+      prompt: resource:shipcheck-prompt;prompt.md
+      conversationStarters:
+        - Is release 2.4 ready to ship?
+        - What is blocking release 2.4?
+        - Who owns the blockers in release 2.4?
+        - Draft release notes for 2.4
+      actions:
+        - get-release-readiness
+        - list-release-blockers
+        - find-release-owners
+        - draft-release-notes
+
+  # ---- MCP server (Best app with Atlassian MCP bonus) ----
+  # One rovo:mcp module per app. Same actions as the agent, exposed as tools
+  # for Rovo Studio custom agents and external MCP clients.
+  rovo:mcp:
+    - key: shipcheck-mcp
+      name: ShipCheck MCP
+      tools:
+        - get-release-readiness
+        - list-release-blockers
+        - find-release-owners
+        - draft-release-notes
+
+  # ---- Rovo actions (shared by the agent and the MCP server) ----
+  action:
+    - key: get-release-readiness
+      name: Get release readiness
+      function: get-readiness-action
+      actionVerb: GET
+      description: |
+        Scores how ready a Jira release (fix version) is to ship, 0-100, with a
+        SHIP / CAUTION / HOLD verdict and a breakdown of completion, blockers,
+        code review, quality gates and docs. Use it for "is release X ready to
+        ship?", "how ready is the release?" or "release readiness".
+      inputs:
+        projectKey:
+          title: Project key
+          type: string
+          required: false
+          description: Jira project key, for example AUR. Leave empty to use the project on screen.
+        version:
+          title: Release version
+          type: string
+          required: false
+          description: Fix version name, for example 2.4. Leave empty to use the next unreleased version.
+    - key: list-release-blockers
+      name: List release blockers
+      function: blockers-action
+      actionVerb: GET
+      description: |
+        Lists everything blocking a Jira release: open blockers, critical bugs,
+        unreviewed pull requests and failing quality gates, each with its owner
+        and a recommended next step. Use it for "what is blocking release X?" or
+        "why can't we ship?".
+      inputs:
+        projectKey:
+          title: Project key
+          type: string
+          required: false
+          description: Jira project key, for example AUR. Leave empty to use the project on screen.
+        version:
+          title: Release version
+          type: string
+          required: false
+          description: Fix version name, for example 2.4. Leave empty to use the next unreleased version.
+    - key: find-release-owners
+      name: Find release owners
+      function: owners-action
+      actionVerb: GET
+      description: |
+        Finds the people who can unblock a release: assignees from Jira plus the
+        people actually engaged with each blocker (recent commenters and their
+        teams, read from the Teamwork Graph), ranked by engagement. Use it for
+        "who owns the blockers?", "who should I ask about this release?" or
+        "who can unblock this?".
+      inputs:
+        projectKey:
+          title: Project key
+          type: string
+          required: false
+          description: Jira project key, for example AUR. Leave empty to use the project on screen.
+        version:
+          title: Release version
+          type: string
+          required: false
+          description: Fix version name, for example 2.4. Leave empty to use the next unreleased version.
+    - key: draft-release-notes
+      name: Draft release notes
+      function: notes-action
+      actionVerb: CREATE
+      description: |
+        Drafts release notes for a Jira release from its done work items and
+        creates the page in Confluence. Use it for "draft release notes for X"
+        or "write the release notes". Ask the user which Confluence space if it
+        is not obvious.
+      inputs:
+        projectKey:
+          title: Project key
+          type: string
+          required: false
+          description: Jira project key, for example AUR. Leave empty to use the project on screen.
+        version:
+          title: Release version
+          type: string
+          required: false
+          description: Fix version name, for example 2.4. Leave empty to use the next unreleased version.
+        spaceKey:
+          title: Confluence space key
+          type: string
+          required: false
+          description: Confluence space key for the notes page. Leave empty to use the project's default space.
+
+  # ---- Background: re-score on issue change + hourly watch ----
+  trigger:
+    - key: issue-updated-rescore
+      function: on-issue-event
+      events:
+        - avi:jira:updated:issue
+  scheduledTrigger:
+    - key: hourly-rescore
+      function: rescore
+      interval: hour
+
+  function:
+    - key: resolver
+      handler: index.handler
+    - key: get-readiness-action
+      handler: index.getReleaseReadinessAction
+    - key: blockers-action
+      handler: index.listReleaseBlockersAction
+    - key: owners-action
+      handler: index.findReleaseOwnersAction
+    - key: notes-action
+      handler: index.draftReleaseNotesAction
+    - key: rescore
+      handler: index.rescore
+    - key: on-issue-event
+      handler: index.onIssueEvent
+
+resources:
+  # UI Kit ("native") resource: points at the JSX entry file, not a build dir.
+  - key: main
+    path: src/frontend/index.jsx
+  - key: shipcheck-prompt
+    path: prompts
+
+permissions:
+  scopes:
+    # Jira: read work + users, write comments when a verdict flips.
+    - read:jira-work
+    - read:jira-user
+    - write:jira-work
+    # Confluence: find + create release-notes pages.
+    - read:confluence-content.summary
+    - write:confluence-content
+    # Forge storage (KVS): watched releases + score history.
+    - storage:app
+    # Teamwork Graph (Preview): people engaged with release work.
+    # One scope per object type the queries touch (issue, status, comment,
+    # user, team). The broad read:graph:jira scope is retired — do not use it.
+    - read:graph:issue:jira
+    - read:graph:issue-status:jira
+    - read:graph:issue-comment:jira
+    - read:graph:user:atlassian
+    - read:graph:team:atlassian
+
+app:
+  runtime:
+    name: nodejs22.x
+  # Placeholder id. `forge register` (or `forge create`) replaces this with the
+  # real app id before the first deploy. See INSTALL.md.
+  id: ari:cloud:ecosystem::app/f81812cc-bdc4-4b8a-967a-5cab214e1ac7

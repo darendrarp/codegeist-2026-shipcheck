@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="560" viewBox="0 0 920 560" font-family="-apple-system, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#5b6b7f"/></marker>
+  </defs>
+  <rect width="920" height="560" rx="12" fill="#f4f5f7"/>
+  <text x="460" y="34" text-anchor="middle" font-size="20" font-weight="700" fill="#172b4d">ShipCheck — Architecture</text>
+
+  <!-- Sources -->
+  <g font-size="13" font-weight="600">
+    <rect x="30" y="60" width="170" height="52" rx="8" fill="#deebff" stroke="#0052cc"/><text x="115" y="80" text-anchor="middle" fill="#0747a6">Jira</text><text x="115" y="98" text-anchor="middle" font-size="11" font-weight="400" fill="#42526e">issues · versions</text>
+    <rect x="30" y="130" width="170" height="52" rx="8" fill="#deebff" stroke="#0052cc"/><text x="115" y="150" text-anchor="middle" fill="#0747a6">Bitbucket</text><text x="115" y="168" text-anchor="middle" font-size="11" font-weight="400" fill="#42526e">PRs · CI checks (dev-status)</text>
+    <rect x="30" y="200" width="170" height="52" rx="8" fill="#deebff" stroke="#0052cc"/><text x="115" y="220" text-anchor="middle" fill="#0747a6">Confluence</text><text x="115" y="238" text-anchor="middle" font-size="11" font-weight="400" fill="#42526e">release-notes pages</text>
+    <rect x="30" y="270" width="170" height="52" rx="8" fill="#e6fcff" stroke="#008da6"/><text x="115" y="290" text-anchor="middle" fill="#006b7d">Teamwork Graph</text><text x="115" y="308" text-anchor="middle" font-size="11" font-weight="400" fill="#42526e">commenters · teams</text>
+  </g>
+
+  <!-- Forge backend -->
+  <rect x="270" y="60" width="380" height="262" rx="10" fill="#ffffff" stroke="#0052cc" stroke-width="1.5"/>
+  <text x="460" y="84" text-anchor="middle" font-size="14" font-weight="700" fill="#0052cc">Forge backend (Node 22, serverless)</text>
+  <g font-size="12.5">
+    <rect x="290" y="98" width="340" height="34" rx="6" fill="#f4f5f7" stroke="#dfe1e6"/><text x="460" y="119" text-anchor="middle" fill="#172b4d">src/jira.js · src/confluence.js · src/twg.js</text>
+    <rect x="290" y="144" width="340" height="34" rx="6" fill="#f4f5f7" stroke="#dfe1e6"/><text x="460" y="165" text-anchor="middle" fill="#172b4d">src/actions.js — 4 Rovo actions</text>
+    <rect x="290" y="190" width="340" height="44" rx="6" fill="#e3fcef" stroke="#36b37e"/><text x="460" y="208" text-anchor="middle" font-weight="700" fill="#006644">src/engine.js — pure scoring</text><text x="460" y="226" text-anchor="middle" font-size="11" fill="#42526e">0–100 · verdict · blockers · notes</text>
+    <rect x="290" y="246" width="340" height="34" rx="6" fill="#f4f5f7" stroke="#dfe1e6"/><text x="460" y="267" text-anchor="middle" fill="#172b4d">src/index.js — resolver · triggers · KVS</text>
+  </g>
+
+  <!-- Outputs -->
+  <g font-size="13" font-weight="600">
+    <rect x="720" y="60" width="170" height="52" rx="8" fill="#eae6ff" stroke="#403294"/><text x="805" y="80" text-anchor="middle" fill="#403294">Jira UI</text><text x="805" y="98" text-anchor="middle" font-size="11" font-weight="400" fill="#42526e">dashboard · issue panel</text>
+    <rect x="720" y="130" width="170" height="52" rx="8" fill="#eae6ff" stroke="#403294"/><text x="805" y="150" text-anchor="middle" fill="#403294">Rovo agent</text><text x="805" y="168" text-anchor="middle" font-size="11" font-weight="400" fill="#42526e">ShipCheck in chat</text>
+    <rect x="720" y="200" width="170" height="52" rx="8" fill="#eae6ff" stroke="#403294"/><text x="805" y="220" text-anchor="middle" fill="#403294">MCP server</text><text x="805" y="238" text-anchor="middle" font-size="11" font-weight="400" fill="#42526e">Rovo Studio · clients</text>
+    <rect x="720" y="270" width="170" height="52" rx="8" fill="#fffae6" stroke="#bf8c00"/><text x="805" y="290" text-anchor="middle" fill="#7a5a00">Hourly watch</text><text x="805" y="308" text-anchor="middle" font-size="11" font-weight="400" fill="#42526e">re-score · verdict alerts</text>
+  </g>
+
+  <!-- Arrows sources -> backend -->
+  <g stroke="#5b6b7f" stroke-width="1.5" marker-end="url(#arrow)">
+    <line x1="200" y1="86" x2="268" y2="110"/>
+    <line x1="200" y1="156" x2="268" y2="118"/>
+    <line x1="200" y1="226" x2="268" y2="122"/>
+    <line x1="200" y1="296" x2="268" y2="128"/>
+    <line x1="652" y1="110" x2="718" y2="86"/>
+    <line x1="652" y1="160" x2="718" y2="156"/>
+    <line x1="652" y1="212" x2="718" y2="226"/>
+    <line x1="652" y1="264" x2="718" y2="296"/>
+  </g>
+
+  <!-- Bottom row: tests + demo -->
+  <rect x="30" y="360" width="420" height="76" rx="8" fill="#ffffff" stroke="#dfe1e6"/>
+  <text x="240" y="386" text-anchor="middle" font-size="13" font-weight="700" fill="#172b4d">Tests — 38 passing (node:test)</text>
+  <text x="240" y="406" text-anchor="middle" font-size="12" fill="#42526e">engine · actions (fake clients) · TWG client (paging, retry)</text>
+  <text x="240" y="424" text-anchor="middle" font-size="12" fill="#42526e">+ full client-side Forge lint: 0 errors, 0 warnings</text>
+  <rect x="470" y="360" width="420" height="76" rx="8" fill="#ffffff" stroke="#dfe1e6"/>
+  <text x="680" y="386" text-anchor="middle" font-size="13" font-weight="700" fill="#172b4d">Live interactive demo (Vercel)</text>
+  <text x="680" y="406" text-anchor="middle" font-size="12" fill="#42526e">Same src/engine.js on sample data — no account needed</text>
+  <text x="680" y="424" text-anchor="middle" font-size="12" fill="#42526e">Toggle issues / PRs, watch the score move</text>
+
+  <rect x="30" y="460" width="860" height="66" rx="8" fill="#e3fcef" stroke="#36b37e"/>
+  <text x="460" y="486" text-anchor="middle" font-size="13" font-weight="700" fill="#006644">Zero paid APIs · Zero Forge LLM calls · Free to run</text>
+  <text x="460" y="508" text-anchor="middle" font-size="12" fill="#42526e">Scoring is deterministic arithmetic; Rovo only narrates the result. Every point lost maps to a named blocker, risk or missing artefact.</text>
+</svg>

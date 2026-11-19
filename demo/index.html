@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ShipCheck — Release Readiness Agent · Interactive Demo</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">✓ ShipCheck</div>
+  <div class="tagline">Release Readiness Agent · Atlassian Forge · Codegeist 2026</div>
+  <a class="repo-link" href="https://github.com/darendrarp/codegeist-2026-shipcheck">GitHub ↗</a>
+</header>
+
+<main>
+  <section class="intro">
+    <h1>Is this release ready to ship?</h1>
+    <p>
+      ShipCheck scores a Jira release <strong>0–100</strong> from live work items, linked Bitbucket
+      pull requests and Confluence docs — then names the blockers, finds their owners in the
+      Teamwork Graph, and drafts the release notes. No LLM in the scoring: every point is
+      explainable. Try it: change an issue status or approve a PR and watch the score move.
+    </p>
+    <p class="disclaimer">
+      Interactive demo — runs the <em>real scoring engine</em> from the Forge app
+      (<code>src/engine.js</code>) on sample data. The full app also ships a Rovo agent,
+      MCP tools, a Jira dashboard, and hourly re-scoring.
+    </p>
+  </section>
+
+  <section class="scenarios">
+    <label>Scenario:</label>
+    <div id="scenario-buttons" class="btn-row"></div>
+  </section>
+
+  <section class="layout">
+    <div class="left">
+      <div class="card gauge-card">
+        <div class="gauge-wrap">
+          <svg id="gauge" viewBox="0 0 200 120" width="200" height="120" aria-label="Readiness score gauge">
+            <path d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="#e5e7eb" stroke-width="16" stroke-linecap="round"/>
+            <path id="gauge-arc" d="M 20 110 A 80 80 0 0 1 180 110" fill="none" stroke="#22c55e" stroke-width="16" stroke-linecap="round"/>
+            <text id="gauge-score" x="100" y="95" text-anchor="middle" font-size="34" font-weight="700" fill="#111827">–</text>
+            <text x="100" y="114" text-anchor="middle" font-size="11" fill="#6b7280">/ 100</text>
+          </svg>
+        </div>
+        <div id="verdict" class="verdict">–</div>
+        <p id="summary" class="summary"></p>
+        <div id="breakdown" class="breakdown"></div>
+      </div>
+
+      <div class="card">
+        <h2>Blockers &amp; risks</h2>
+        <div id="blockers"></div>
+        <h2>Recommended next steps</h2>
+        <ol id="actions"></ol>
+        <div id="notes"></div>
+      </div>
+
+      <div class="card">
+        <h2>Ask ShipCheck <span class="sim-badge">demo simulation of the Rovo agent</span></h2>
+        <div id="chat-log" class="chat-log"></div>
+        <div class="btn-row" id="quick-questions"></div>
+        <div class="chat-input-row">
+          <input id="chat-input" type="text" placeholder="Ask about this release…" autocomplete="off">
+          <button id="chat-send">Ask</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="card">
+        <h2>Work items <span class="hint">click a status to cycle it</span></h2>
+        <div id="issues"></div>
+      </div>
+      <div class="card">
+        <h2>Pull requests <span class="hint">click to approve / merge</span></h2>
+        <div id="prs"></div>
+      </div>
+      <div class="card">
+        <h2>Docs</h2>
+        <label class="check"><input type="checkbox" id="doc-notes"> Release notes page exists in Confluence</label>
+        <label class="check"><input type="checkbox" id="doc-runbook"> Runbook linked</label>
+      </div>
+      <div class="card">
+        <h2>Release notes preview</h2>
+        <div id="notes-preview" class="notes-preview"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>ShipCheck · Built for Atlassian Codegeist 2026 · Category: Apps for Software Teams ·
+    Bonuses: Best Agents (Rovo) · Best app with Atlassian MCP · Best Teamwork Graph integration</p>
+    <p>Scoring uses zero paid APIs and zero Forge LLM calls — deterministic, explainable, free to run.</p>
+  </footer>
+</main>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>
